@@ -1,0 +1,73 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  USER
+
+  @@map("roles")
+}
+
+enum VerificationStatus {
+  VERIFIED
+  PENDING
+  UNVERIFIED
+
+  @@map("verification_status")
+}
+
+enum PasswordResetStatus {
+  PENDING
+  IDLE
+
+  @@map("password_reset_status")
+}
+
+model User {
+  id                   String              @id @default(uuid())
+  firstName            String
+  lastName             String
+  email                String              @unique
+  password             String
+  phoneNumber          String              @map("phone_number")
+  role                 Role
+  profilePicture       File?               @relation(fields: [profilePictureId], references: [id])
+  profilePictureId     String?             @map("profile_picture_id")
+  verificationStatus   VerificationStatus  @default(UNVERIFIED) @map("verification_status")
+  verificationCode     String?             @map("verification_code")
+  verificationExpires  DateTime?           @map("verification_expires")
+  passwordResetStatus  PasswordResetStatus @default(IDLE) @map("password_reset_status")
+  passwordResetCode    String?             @map("password_reset_code")
+  passwordResetExpires DateTime?           @map("password_reset_expires")
+  createdAt            DateTime            @default(now()) @map("created_at")
+  updatedAt            DateTime            @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model File {
+  id           String   @id @default(uuid())
+  name         String
+  originalName String   @map("original_name")
+  url          String
+  folder       String
+  type         String
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  users        User[]
+
+  @@map("files")
+}
