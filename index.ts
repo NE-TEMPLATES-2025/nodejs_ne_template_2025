@@ -4,7 +4,8 @@ import bodyParser from 'body-parser';
 import cors from 'cors'
 import authRouter from "./src/routes/auth.routes"
 import userRouter from "./src/routes/user.routes"
-
+import swaggerUi from "swagger-ui-express"
+import swaggerDoc from "./src/swagger/swagger.json"
 dotenv.config();
 
 const app :express.Application = express();
@@ -25,6 +26,7 @@ app.use(cors({
 
 app.use("/api/v1/user",userRouter)
 app.use("/api/v1/auth",authRouter)
+app.use("/api/v1/docs",swaggerUi.serve,swaggerUi.setup(swaggerDoc))
 
 // app.use("*",(req,res)=>{
 //     console.log("Route not found")
