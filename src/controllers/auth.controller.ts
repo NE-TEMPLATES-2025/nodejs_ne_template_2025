@@ -2,13 +2,12 @@ import { Request, Response } from "express";
 import prisma from "../../prisma/prisma-client";
 import { InitiateAccountVerificationDto, InitiateResetPasswordDto, LoginDto, ResetPasswordDto, VerifyAccountDto } from "../dtos";
 import * as bcrypt from 'bcryptjs'
-import { createToken } from "../utils";
+import { createToken, createTransporter } from "../utils";
 import { apiResponse } from "../response/ApiResponse";
-import nodemailer from 'nodemailer'
 
 
 
-    const login =async(req:Request, res: Response)=>{
+    const login =async(req:Request, res: Response) =>{
         const request= req.body as LoginDto
 
         try {
@@ -59,16 +58,7 @@ import nodemailer from 'nodemailer'
         })
         // Then send the email
 
-        const transporter= nodemailer.createTransport({
-            port:465,
-            host:"smtp.gmail.com",
-            auth:{
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS
-            },
-            secure: true
-
-        })
+        const transporter= createTransporter();
         
         transporter.sendMail({
             from: process.env.EMAIL_USER,
@@ -83,7 +73,6 @@ import nodemailer from 'nodemailer'
             console.log("Email sent successfully to "+ user.email);
             
         })
-
 
         res.status(201).json(apiResponse({
             message:"Account verification initated successfully",
@@ -122,18 +111,10 @@ import nodemailer from 'nodemailer'
                     verificationStatus:"VERIFIED"
                 }
             })
-            const transporter= nodemailer.createTransport({
-                port:465,
-                host:"smtp.gmail.com",
-                auth:{
-                    user: process.env.EMAIL_USER,
-                    pass: process.env.EMAIL_PASS
-                },
-                secure: true
-    
-            })
+           
             
             
+            const transporter= createTransporter();
             transporter.sendMail({
                 from: process.env.EMAIL_USER,
                 to:user.email,
@@ -186,16 +167,7 @@ import nodemailer from 'nodemailer'
 
 
 
-        const transporter= nodemailer.createTransport({
-            port:465,
-            host:"smtp.gmail.com",
-            auth:{
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS
-            },
-            secure: true
-
-        })
+        const transporter= createTransporter();
         
         transporter.sendMail({
             from: process.env.EMAIL_USER,
@@ -254,16 +226,7 @@ import nodemailer from 'nodemailer'
 
 
 
-        const transporter= nodemailer.createTransport({
-            port:465,
-            host:"smtp.gmail.com",
-            auth:{
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS
-            },
-            secure: true
-
-        })
+        const transporter= createTransporter();
         
         transporter.sendMail({
             from: process.env.EMAIL_USER,
