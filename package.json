@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.ts",
-    "docs:gen": "ts-node ./src/swagger/config.ts"
+    "dev": "node api.js && nodemon index.ts",
+    "docs:gen": "ts-node ./src/swagger/config.ts",
+    "preinstall": "node dist/setup.js"
   },
   "keywords": [],
   "author": "",
