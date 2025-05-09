@@ -147,6 +147,22 @@ exports.Prisma.FileScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.EmployeeScalarFieldEnum = {
+  id: 'id',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  email: 'email',
+  phoneNumber: 'phoneNumber',
+  nationalId: 'nationalId',
+  department: 'department',
+  position: 'position',
+  laptopManufacturer: 'laptopManufacturer',
+  laptopModel: 'laptopModel',
+  serialNumber: 'serialNumber',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -179,7 +195,8 @@ exports.PasswordResetStatus = exports.$Enums.PasswordResetStatus = {
 
 exports.Prisma.ModelName = {
   User: 'User',
-  File: 'File'
+  File: 'File',
+  Employee: 'Employee'
 };
 
 /**

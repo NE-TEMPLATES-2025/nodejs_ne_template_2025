@@ -23,7 +23,6 @@ export const checkAuth = async(req:CustomRequest,res:Response,next: NextFunction
                 const token= authHeader.substring(7);  // or const token= authHeader.split(" ")[1];
                 const decodedToken = jwt.verify(token,process.env.JWT_SECRET_KEY as string, {}) as DecodedToken
     
-                console.log("Decoded Token",decodedToken);
                 
                 const user= await prisma.user.findUnique({
                     where:{

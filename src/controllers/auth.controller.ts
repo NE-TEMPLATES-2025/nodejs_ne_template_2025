@@ -17,9 +17,9 @@ import { apiResponse } from "../response/ApiResponse";
                     email: request.email
                 }
             })
-            if(!user) throw new Error(`Invalid credentials, One or more field are incorrect`);
+            if(!user) throw new Error(`Invalid credentials`);
             const matches= await bcrypt.compare(request.password,user.password);
-            if(!matches) throw new Error(`Invalid credentials, One or more field are incorrect`)
+            if(!matches) throw new Error(`Invalid credentials`)
 
           const token= await createToken(user.id);
           res.status(200).json(
@@ -32,6 +32,7 @@ import { apiResponse } from "../response/ApiResponse";
         }
 
     }
+
 
     const initiateAccountVerification =async(req:Request, res: Response)=>{
 
@@ -65,7 +66,18 @@ import { apiResponse } from "../response/ApiResponse";
             to:user.email,
             subject: "Account Verification Request",
             text: "Account Verification Request",
-            html:""
+            html:`
+            <div style="font-family: Arial, sans-serif; line-height: 1.5;">
+                <h2>Veify you Account</h2>
+                <p>Hello ${user.firstName} ${user.lastName},</p>
+                <p>Please use the following code to verify your account</p>
+                <h3 style="color: #2d89ef;">${verificationCode}</h3>
+                <p>This code will expire in 10 minutes.</p>
+                <br />
+                <p>If you didn’t request this, you can safely ignore this email.</p>
+                <p>— Your Company Name</p>
+            </div>
+            `
         },(err,info)=>{
             if(err){
                 console.log(err)
@@ -120,7 +132,16 @@ import { apiResponse } from "../response/ApiResponse";
                 to:user.email,
                 subject: "Account Verified Successfully",
                 text: "Account Verification Successfull",
-                html:""
+                html:`
+                
+                <div style="fontFamily:Arial, sans-serif;">
+                
+                <p>Account Verification Successful</p>
+                <p>Hello ${user.firstName} ${user.lastName},</p>
+                <p>You have successfully verified your account, please continue using the app</p>
+                </dv>
+
+                `
             },(err,info)=>{
                 if(err){
                     console.log(err)
@@ -165,8 +186,6 @@ import { apiResponse } from "../response/ApiResponse";
             }
         })
 
-
-
         const transporter= createTransporter();
         
         transporter.sendMail({
@@ -174,7 +193,18 @@ import { apiResponse } from "../response/ApiResponse";
             to:user.email,
             subject: "Password Reset Request",
             text: "Password Reset Request",
-            html:"",
+            html:`
+            <div style="font-family: Arial, sans-serif; line-height: 1.5;">
+                <h2>Reset your password</h2>
+                <p>Hello ${user.firstName} ${user.lastName},</p>
+                <p>Please use the following code to reset your password</p>
+                <h3 style="color: #2d89ef;">${resetCode}</h3>
+                <p>This code will expire in 10 minutes.</p>
+                <br />
+                <p>If you didn’t request this, you can safely ignore this email.</p>
+                <p>— Your Company Name</p>
+            </div>
+            `,
             
         },(err,info)=>{
             if(err){
@@ -233,7 +263,15 @@ import { apiResponse } from "../response/ApiResponse";
             to:user.email,
             subject: "Password Reset Successfull",
             text: "Password Reset Successfull",
-            html:"",
+            html:`
+            
+              <div style="fontFamily:Arial, sans-serif;">
+                
+                <p>Password reset Successful</p>
+                <p>Hello ${user.firstName} ${user.lastName},</p>
+                <p>You have successfully reset your password, please continue using the app</p>
+                </dv>
+            `,
             
         },(err,info)=>{
             if(err){
